@@ -1,2 +1,17 @@
-# card-game-simulator
-A Python-based card game simulator that implements a card, deck, and player system. The repository includes classes to manage card creation, deck operations (drawing, shuffling), and player actions. It is designed to help simulate card game scenarios and practice data structure manipulation.
+# Card Game Simulator
+
+This Python repository simulates a card game environment where you can create cards, decks, and players. The core functionality includes drawing cards, shuffling decks, and managing player hands. 
+
+## Features
+- **Card**: Represents a card with a rank and suit.
+- **Deck**: Manages a deck of 52 cards, with functionality for drawing and shuffling.
+- **Player**: Represents a player with a hand of cards and the ability to draw cards from a deck.
+
+## Installation
+
+Clone the repository and run the tests to check for functionality.
+
+```bash
+git clone https://github.com/yourusername/card-game-simulator.git
+cd card-game-simulator
+python3 -m unittest discover
