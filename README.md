@@ -13,5 +13,5 @@ This Python repository simulates a card game environment where you can create ca
 Clone the repository and run the tests to check for functionality.
 
 ```bash
-git clone https://github.com/yourusername/card-game-simulator.git
+git clone https://github.com/Kailashw/card-game-simulator
 cd card-game-simulator
