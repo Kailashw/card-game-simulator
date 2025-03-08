@@ -1,6 +1,6 @@
 from collections import Counter
 from models.card import Card
-from models.person import Player
+from models.player import Player
 from models.deck import Deck
 import pprint
 

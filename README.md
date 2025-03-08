@@ -6,6 +6,7 @@ This Python repository simulates a card game environment where you can create ca
 - **Card**: Represents a card with a rank and suit.
 - **Deck**: Manages a deck of 52 cards, with functionality for drawing and shuffling.
 - **Player**: Represents a player with a hand of cards and the ability to draw cards from a deck.
+- **Game**: Represents a game with group of players, where they can draw or pack.
 
 ## Installation
 
