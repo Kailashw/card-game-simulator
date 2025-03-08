@@ -6,26 +6,82 @@ import pprint
 
 class Game:
     def __init__(self, player_names: list[str], include_joker=False):
+        """
+        Initialize a Game object with a given set of players.
+
+        Args:
+            player_names (list[str]): A list of player names.
+            include_joker (bool, optional): Include two Jokers in the deck. Defaults to False.
+        """
         self.deck = Deck(include_joker=include_joker)
         self.deck.shuffle()
         self.players = {name: Player(name) for name in player_names}
 
     def deal(self, num_cards: int):
+        """
+        Deal a specified number of cards to each player in the game.
+
+        Args:
+            num_cards (int): The number of cards to deal to each player.
+
+        Returns:
+            None
+        """
+        
         for _ in range(num_cards):
             for player in self.players.values():
                 player.draw(self.deck)
 
     def show_hands(self):
+        """
+        Display the current hands of all players in the game.
+
+        Retrieves each player's hand and prints it in a readable format using
+        pretty print.
+
+        No arguments are required, and the function does not return any values.
+        """
         hands = {player.name: player.show_hand() for player in self.players.values()}
         pprint.pprint(hands)
 
     def remove_player(self, player_name: str):
+        """
+        Remove a player from the game by their name.
+
+        If the player exists, their hand is returned to the deck, and the player is removed from the game.
+
+        Args:
+            player_name (str): The name of the player to remove.
+        """
         if player_name in self.players:
             self.deck.add_cards(self.players[player_name].hand)
             del self.players[player_name]
 
     def evaluate_hand(self, hand):
-        """Determine the ranking of a given hand, considering Joker only when necessary."""
+        """
+        Evaluate the given hand of cards and return a tuple of (hand_name, values) where
+        hand_name is a string describing the type of hand (e.g. "Straight Flush", "One Pair", etc.)
+        and values is a list of integers representing the ranks of the cards in the hand.
+
+        The order of the ranks in the list is important for determining the best hand in case of a tie.
+        The first element in the list is the highest ranking card, the second element is the second highest, etc.
+
+        If the hand contains a Joker, it is used to complete a Straight or other combinations if possible.
+        If the Joker is not used, it is not included in the list of ranks.
+
+        The possible hand names and the corresponding values are as follows:
+
+        - Straight Flush: A list of 5 consecutive ranks in the same suit, e.g. [3, 4, 5, 6, 7]
+        - Four of a Kind: A list of 4 identical ranks, followed by the highest ranking kicker, e.g. [4, 4, 4, 4, 8]
+        - Full House: A list of 3 identical ranks, followed by a pair of identical ranks, e.g. [3, 3, 3, 7, 7]
+        - Flush: A list of 5 ranks in the same suit, e.g. [2, 3, 5, 6, 9]
+        - Straight: A list of 5 consecutive ranks, e.g. [3, 4, 5, 6, 7]
+        - Three of a Kind: A list of 3 identical ranks, followed by the two highest ranking kickers, e.g. [3, 3, 3, 9, 7]
+        - Two Pair: A list of 2 identical ranks, followed by a second pair of identical ranks, followed by the highest ranking kicker, e.g. [2, 2, 5, 5, 9]
+        - One Pair: A list of 2 identical ranks, followed by the three highest ranking kickers, e.g. [2, 2, 9, 7, 5]
+        - High Card: A list of the highest ranking cards, e.g. [9, 7, 5, 3, 2]
+
+        """
         if not hand:
             return ("No Cards", [])
         
