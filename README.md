@@ -15,4 +15,3 @@ Clone the repository and run the tests to check for functionality.
 ```bash
 git clone https://github.com/yourusername/card-game-simulator.git
 cd card-game-simulator
-python3 -m unittest discover
