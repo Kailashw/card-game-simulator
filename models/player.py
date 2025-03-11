@@ -79,4 +79,15 @@ class Player:
 
         # Sort the cards using the custom key
         return sorted(self.hand, key=sort_key)
-  
+    
+    def play(self,leading_suit=None):
+        if leading_suit:
+            suited_cards = [card for card in self.hand if card.suit == leading_suit]
+            if suited_cards:
+                played_card = suited_cards.pop(0)  # Play first matching suit card
+            else:
+                played_card = self.hand.pop(0)  # Play any available card
+        else:
+            played_card = self.hand.pop(0)  # First player can play any card
+
+        return played_card

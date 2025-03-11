@@ -16,8 +16,10 @@ class Game:
         self.deck = Deck(include_joker=include_joker)
         self.deck.shuffle()
         self.players = {name: Player(name) for name in player_names}
+        self.turn_order = list(self.players.keys())  # Order of play
+        self.round_winner = None
 
-    def deal(self, num_cards: int):
+    def deal(self, num_cards: int=None):
         """
         Deal a specified number of cards to each player in the game.
 
@@ -28,7 +30,7 @@ class Game:
             None
         """
         
-        for _ in range(num_cards):
+        for _ in range(num_cards) if num_cards else range(len(self.deck.cards)):
             for player in self.players.values():
                 player.draw(self.deck)
 
@@ -147,7 +149,6 @@ class Game:
         else:
             return ("High Card", sorted([Card.rank_values[rank] for rank in ranks], reverse=True))
 
-
     def determine_winner(self):
         """Determine the player with the best hand."""
         hand_rankings = {
@@ -183,3 +184,37 @@ class Game:
                     best_hand_value = hand_value
         
         return best_player, best_hand
+
+    def play_round(self):
+        """Each player plays one card, and the highest card in the leading suit wins."""
+        print("\n--- New Round ---")
+        played_cards = {}
+
+        first_player = self.round_winner if self.round_winner else self.turn_order[0]
+        leading_suit = None
+
+        for i, player_name in enumerate(self.turn_order):
+            player = self.players[player_name]
+            card_played = player.play(leading_suit)
+            played_cards[player_name] = card_played
+
+            if i == 0:
+                leading_suit = card_played.suit  # Set the suit for the round
+
+            print(f"{player_name} plays {card_played}")
+
+        self.determine_round_winner(played_cards, leading_suit)
+
+    def determine_round_winner(self, played_cards: dict, leading_suit: str):
+        """Determines the winner based on the highest-ranked card in the leading suit."""
+        valid_cards = {p: c for p, c in played_cards.items() if c.suit == leading_suit}
+        winner = max(valid_cards, key=lambda p: Card.rank_values[valid_cards[p].rank])
+        self.round_winner = winner  # Winner starts the next round
+
+        print(f"🏆 {winner} wins the round!\n")
+
+    def play_game(self):
+        """Plays 13 rounds of the game."""
+        self.deal()
+        for _ in range(13):
+            self.play_round()
